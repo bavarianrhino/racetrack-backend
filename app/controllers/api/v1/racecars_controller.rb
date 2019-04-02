@@ -1,13 +1,19 @@
 class Api::V1::RacecarsController < ApplicationController
 
-  def index
+    def index
 		@racecars = Racecar.all
 		render json: @racecars, status: :ok
-	end
+    end
+    
+    def show
+        @racecar = Racecar.find(params[:id])
+        render json: @racecar.as_json(:include => {:scores => {:include => :user}}), status: :ok
+		# render json: @user.as_json(:include => :scores), status: :ok
+    end
 
 	def create
 		@racecar = Racecar.create(racecars_params)
-        if @racecar.save
+        if @racecar.valid?
             render json: @racecar.as_json(:include => :users), status: :created
 			# render json: @racecar, status: :created
         else
