@@ -1,4 +1,4 @@
-class Api::V1::RacecarController < ApplicationController
+class Api::V1::RacecarsController < ApplicationController
 
   def index
 		@racecars = Racecar.all
@@ -6,9 +6,9 @@ class Api::V1::RacecarController < ApplicationController
 	end
 
 	def create
-		@racecar = Racecar.new(racecars_params)
+		@racecar = Racecar.create(racecars_params)
         if @racecar.save
-            render json: @racecar
+            render json: @racecar.as_json(:include => :users), status: :created
 			# render json: @racecar, status: :created
         else
             render json: { error: 'failed to create racecar....Ryans Error' }
